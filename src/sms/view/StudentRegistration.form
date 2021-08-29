@@ -321,6 +321,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Browse Picture"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BrowsePictureButtonActionPerformed"/>
+      </Events>
     </Component>
     <Container class="javax.swing.JPanel" name="jPanel1">
       <Properties>
@@ -497,11 +500,12 @@
         <Component class="javax.swing.JTable" name="StudentTable">
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-              <Table columnCount="8" rowCount="0">
+              <Table columnCount="9" rowCount="0">
                 <Column editable="true" title="First name" type="java.lang.Object"/>
                 <Column editable="true" title="Last name" type="java.lang.Object"/>
                 <Column editable="true" title="Reg number" type="java.lang.Object"/>
                 <Column editable="true" title="Email" type="java.lang.Object"/>
+                <Column editable="true" title="Photo" type="java.lang.Object"/>
                 <Column editable="true" title="Faculty" type="java.lang.Object"/>
                 <Column editable="true" title="Phone number" type="java.lang.Object"/>
                 <Column editable="true" title="Semester" type="java.lang.Object"/>
@@ -510,6 +514,11 @@
             </Property>
             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
               <TableColumnModel selectionModel="0">
+                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                  <Title/>
+                  <Editor/>
+                  <Renderer/>
+                </Column>
                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                   <Title/>
                   <Editor/>

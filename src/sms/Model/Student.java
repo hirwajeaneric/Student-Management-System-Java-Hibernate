@@ -19,6 +19,7 @@ public class Student {
     private String regNumber;
     //private String picture;
     private String emailAddress;
+    private String photo;
     private String faculty;
     private String phonenumber;
     private String semester;
@@ -29,16 +30,19 @@ public class Student {
     public Student() {
     }
 
-    public Student(String firstName, String lastName, String regNumber, String emailAddress, String faculty, String phonenumber, String semester, String course) {
+    public Student(String firstName, String lastName, String regNumber, String emailAddress, String photo, String faculty, String phonenumber, String semester, String course) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.regNumber = regNumber;
         this.emailAddress = emailAddress;
+        this.photo = photo;
         this.faculty = faculty;
         this.phonenumber = phonenumber;
         this.semester = semester;
         this.course = course;
     }
+
+     
 
     public String getFirstName() {
         return firstName;
@@ -70,6 +74,14 @@ public class Student {
 
     public void setEmailAddress(String emailAddress) {
         this.emailAddress = emailAddress;
+    }
+    
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 
     public String getFaculty() {

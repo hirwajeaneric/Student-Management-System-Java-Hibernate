@@ -5,61 +5,62 @@
  */
 package sms.controller;
 
-import java.io.*;
 import java.util.*;
-import java.util.logging.*;
-
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.hibernate.*;
 
 import sms.util.HibernateUtil;
 import sms.Model.Student;
-import sms.view.StudentRegistration;
 
 /**
  *
  * @author hirwa
  */
 
-public class StudentDao {
+public class StudentDao implements IstudentInterface{
     Session ss = null;
     Transaction tx = null;
     
-    public void save(Student st){
+    @Override
+    public Student save(Student st){
         ss = HibernateUtil.getSessionFactory().openSession();
         tx = ss.beginTransaction();
         ss.save(st);
         tx.commit();
         ss.close();
+        return st;
     }
     
-    public void update(Student st){
+    @Override
+    public Student update(Student st){
         ss = HibernateUtil.getSessionFactory().openSession();
         tx = ss.beginTransaction();
         ss.update(st);
         tx.commit();
         ss.close();
+        return st;
     }
     
-    public void delete(Student st){
+    @Override
+    public Student delete(Student st){
         ss = HibernateUtil.getSessionFactory().openSession();
         tx = ss.beginTransaction();
         ss.delete(st);
         tx.commit();
         ss.close();
+        return st;
     }
     
-    
-    public void importExcelSheet(Student st){    
+    @Override
+    public Student importExcelSheet(Student st){    
         ss = HibernateUtil.getSessionFactory().openSession();
         tx = ss.beginTransaction();
         ss.saveOrUpdate(st);
         tx.commit();
         ss.close();
+        return st;
     }
     
+    @Override
     public List<Student> stList(){
         ss = HibernateUtil.getSessionFactory().openSession();
         tx = ss.beginTransaction();
@@ -70,6 +71,7 @@ public class StudentDao {
     }
 
     /*This method will help us to find and select all students from the database table.*/
+    @Override
     public List<Student> findAll (Student st) {
         ss = HibernateUtil.getSessionFactory().openSession();
         tx = ss.beginTransaction();
@@ -77,10 +79,6 @@ public class StudentDao {
         tx.commit();
         ss.close();
         return all;
-    }
-    
-    public void exportPdf() {
-        
     }
     
 }

@@ -5,71 +5,80 @@
  */
 package sms.controller;
 
-import java.util.List;
+import java.util.*;
+import org.hibernate.*;
+
 import sms.util.HibernateUtil;
 import sms.Model.Courses;
-import org.hibernate.*;
 
 /**
  *
  * @author hirwa
  */
-public class courseDao {
+
+public class courseDao implements IcourseInterface{
     Session ss = null;
-    public Courses save(Courses cs){
+    Transaction tx = null;
+    
+    @Override
+    public Courses save(Courses cr){
         ss = HibernateUtil.getSessionFactory().openSession();
-        Transaction tx = ss.beginTransaction();
-        ss.save(cs);
+        tx = ss.beginTransaction();
+        ss.save(cr);
         tx.commit();
         ss.close();
-        return cs;
+        return cr;
     }
     
-    public Courses update(Courses cs){
+    @Override
+    public Courses update(Courses cr){
         ss = HibernateUtil.getSessionFactory().openSession();
-        Transaction tx = ss.beginTransaction();
-        ss.update(cs);
+        tx = ss.beginTransaction();
+        ss.update(cr);
         tx.commit();
         ss.close();
-        return cs;
+        return cr;
     }
     
-    public Courses delete(Courses cs){
+    @Override
+    public Courses delete(Courses cr){
         ss = HibernateUtil.getSessionFactory().openSession();
-        Transaction tx = ss.beginTransaction();
-        ss.delete(cs);
+        tx = ss.beginTransaction();
+        ss.delete(cr);
         tx.commit();
         ss.close();
-        return cs;
+        return cr;
     }
     
-    public List<Courses> displayCourses(){
+    @Override
+    public Courses importExcelSheet(Courses cr){    
         ss = HibernateUtil.getSessionFactory().openSession();
-        Transaction tx = ss.beginTransaction();
-        List<Courses> cour = (List<Courses>) ss.createCriteria(Courses.class).list();
+        tx = ss.beginTransaction();
+        ss.saveOrUpdate(cr);
         tx.commit();
         ss.close();
-        return cour;
+        return cr;
+    }
+    
+    @Override
+    public List<Courses> stList(){
+        ss = HibernateUtil.getSessionFactory().openSession();
+        tx = ss.beginTransaction();
+        Query q = ss.createQuery("From courses");
+        List<Courses> sl = q.list();
+        ss.getTransaction().commit();
+        return sl;
     }
 
     /*This method will help us to find and select all students from the database table.*/
-    public List<Courses> findAll (Courses crs) {
+    @Override
+    public List<Courses> findAll (Courses cr) {
         ss = HibernateUtil.getSessionFactory().openSession();
-        Transaction tx = ss.beginTransaction();
-        List<Courses> allcrs = (List<Courses>) ss.createCriteria(crs.getClass()).list();
+        tx = ss.beginTransaction();
+        List<Courses> all = (List<Courses>) ss.createCriteria(cr.getClass()).list();
         tx.commit();
         ss.close();
-        return allcrs;
+        return all;
     }
-    /*
-    public Courses findCourses (String courseName){
-        ss = HibernateUtil.getSessionFactory().openSession();
-        Transaction tx = ss.beginTransaction();
-        String sql = "from courses where name='"+courseName+"'";
-        Query query = ss.createQuery(sql);
-        tx.commit();
-        ss.close();
-        return (Courses)query.uniqueResult();
-    }
-*/
+    
 }

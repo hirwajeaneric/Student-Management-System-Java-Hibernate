@@ -27,17 +27,7 @@ public class CourseRegistration extends javax.swing.JInternalFrame {
 
     public void updateTableCourseRegistration(){
         
-        DefaultTableModel model = (DefaultTableModel) courseRegistrationTable.getModel();
-        model.setRowCount(0);
         
-        courseDao crsdao = new courseDao();
-        List<Courses> cr = crsdao.displayCourses();
-        
-        for (Courses c: cr){
-            Object[] obj = {c.getCourseId(), c.getCourseName(), c.getCredits(), c.getSemester()};
-            model.addRow(obj);
-        }
-        courseRegistrationTable.setModel(model);
     }
 
     

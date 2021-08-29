@@ -9,6 +9,7 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import java.awt.Image;
 import java.io.*;
 import java.util.List;
 import java.util.logging.Level;
@@ -27,6 +28,8 @@ import sms.controller.*;
  */
 public class StudentRegistration extends javax.swing.JInternalFrame {
     
+    String path = null;
+    ImageIcon apicture = null;
     /**
      * Creates new form StudentReg
      */
@@ -40,6 +43,7 @@ public class StudentRegistration extends javax.swing.JInternalFrame {
     public void updateTable(){
         DefaultTableModel model = (DefaultTableModel) StudentTable.getModel();
         model.setRowCount(0);
+        
         StudentDao stdo = new StudentDao();
         List<Student> stls = stdo.stList();
         
@@ -49,6 +53,7 @@ public class StudentRegistration extends javax.swing.JInternalFrame {
                 st.getLastName(),
                 st.getRegNumber(),
                 st.getEmailAddress(),
+                st.getPhoto(),
                 st.getFaculty(),
                 st.getPhonenumber(),
                 st.getSemester(),
@@ -62,6 +67,7 @@ public class StudentRegistration extends javax.swing.JInternalFrame {
         lastNameField.setText("");
         registrationNumberField.setText("");
         emailAddressField.setText("");
+        imageLabel.setIcon(new ImageIcon());
         facultyComboBox.setSelectedIndex(0);
         phoneNumberField.setText("");
         semesterComboBox.setSelectedIndex(0);
@@ -225,6 +231,11 @@ public class StudentRegistration extends javax.swing.JInternalFrame {
         );
 
         BrowsePictureButton.setText("Browse Picture");
+        BrowsePictureButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BrowsePictureButtonActionPerformed(evt);
+            }
+        });
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Actions"));
 
@@ -348,7 +359,7 @@ public class StudentRegistration extends javax.swing.JInternalFrame {
 
             },
             new String [] {
-                "First name", "Last name", "Reg number", "Email", "Faculty", "Phone number", "Semester", "Course"
+                "First name", "Last name", "Reg number", "Email", "Photo", "Faculty", "Phone number", "Semester", "Course"
             }
         ));
         StudentTable.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -417,13 +428,15 @@ public class StudentRegistration extends javax.swing.JInternalFrame {
             st.setLastName(lastNameField.getText());
             st.setRegNumber(registrationNumberField.getText());
             st.setEmailAddress(emailAddressField.getText());
+            st.setPhoto(path);
             st.setFaculty(facultyComboBox.getSelectedItem().toString());
             st.setPhonenumber(phoneNumberField.getText());
             st.setSemester(semesterComboBox.getSelectedItem().toString());
             st.setCourse(CourseComboBox.getSelectedItem().toString());
-       
-            StudentDao stdo = new StudentDao();
-            stdo.save(st);
+            
+            IstudentInterface stin = new StudentDao();
+            Student ss = stin.save(st);
+            //stdo.save(st);
        
             updateTable();
             resetFields();
@@ -446,13 +459,14 @@ public class StudentRegistration extends javax.swing.JInternalFrame {
             st.setLastName(lastNameField.getText());
             st.setRegNumber(registrationNumberField.getText());
             st.setEmailAddress(emailAddressField.getText());
+            st.setPhoto(path);
             st.setFaculty(facultyComboBox.getSelectedItem().toString());
             st.setPhonenumber(phoneNumberField.getText());
             st.setSemester(semesterComboBox.getSelectedItem().toString());
             st.setCourse(CourseComboBox.getSelectedItem().toString());
        
-            StudentDao stdo = new StudentDao();
-            stdo.update(st);
+            IstudentInterface stin = new StudentDao();
+            Student ss = stin.update(st);
        
             updateTable();
             resetFields();
@@ -468,7 +482,7 @@ public class StudentRegistration extends javax.swing.JInternalFrame {
         try {
             //Taking data from the file
             //NOTE: To use this file, please create your own path which contains your own excelsheet.
-            FileInputStream file = new FileInputStream(new File("/home/hirwa/NetBeansProjects/22026-Student.M.S.HIBERNATE/excelfile.xlsx"));
+            FileInputStream file = new FileInputStream(new File("/home/hirwa/NetBeansProjects/Student.M.S.HIBERNATE.v2/excelfile.xlsx"));
             //Creating the workbook.
             XSSFWorkbook workbook = new XSSFWorkbook(file);
             XSSFSheet sheet = workbook.getSheetAt(0);
@@ -477,36 +491,40 @@ public class StudentRegistration extends javax.swing.JInternalFrame {
                 row = (Row) sheet.getRow(i);//Sheet number
                 
                 String firstname;
-                if(row.getCell(0)==null) firstname = "null";
+                if(row.getCell(0)==null) firstname = " ";
                 else firstname = row.getCell(0).toString();
                 
                 String lastname;
-                if(row.getCell(1)== null) lastname = "null";
+                if(row.getCell(1)== null) lastname = " ";
                 else lastname = row.getCell(1).toString();
                 
                 String regnumber = null;
-                if(row.getCell(2)==null) firstname = "0";
-                else regnumber = row.getCell(0).toString();
+                if(row.getCell(2)==null) regnumber = " ";
+                else regnumber = row.getCell(2).toString();
                 
                 String emailaddress = null;
-                if(row.getCell(3)== null) lastname = "null";
-                else emailaddress = row.getCell(1).toString();
+                if(row.getCell(3)== null) emailaddress = " ";
+                else emailaddress = row.getCell(3).toString();
+                
+                String photo = null;
+                if(row.getCell(4)== null) photo = " ";
+                else photo = row.getCell(4).toString();
                 
                 String faculty = null;
-                if(row.getCell(4)==null) firstname = "null";
-                else faculty = row.getCell(0).toString();
+                if(row.getCell(5)==null) faculty = "null";
+                else faculty = row.getCell(5).toString();
                 
                 String phonenumber = null;
-                if(row.getCell(5)== null) lastname = "0";
-                else phonenumber = row.getCell(1).toString();
+                if(row.getCell(6)== null) phonenumber = "0";
+                else phonenumber = row.getCell(6).toString();
                 
                 String semester = null;
-                if(row.getCell(6)==null) firstname = "1";
-                else semester = row.getCell(0).toString();
+                if(row.getCell(7)==null) semester = "1";
+                else semester = row.getCell(7).toString();
                 
                 String course = null;
-                if(row.getCell(7)== null) lastname = "null";
-                else course = row.getCell(1).toString();
+                if(row.getCell(8)== null) course = " ";
+                else course = row.getCell(8).toString();
                 
                 Student st = new Student();
                 
@@ -514,6 +532,7 @@ public class StudentRegistration extends javax.swing.JInternalFrame {
                 st.setLastName(lastname);
                 st.setRegNumber(regnumber);
                 st.setEmailAddress(emailaddress);
+                st.setPhoto(photo);
                 st.setFaculty(faculty);
                 st.setPhonenumber(phonenumber);
                 st.setSemester(semester);
@@ -525,14 +544,13 @@ public class StudentRegistration extends javax.swing.JInternalFrame {
                 updateTable();
                 
                 file.close();
-                
-                JOptionPane.showMessageDialog(this, "Successfuly Uploaded data!!");
             }
         } catch (FileNotFoundException ex) {
             Logger.getLogger(StudentRegistration.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(StudentRegistration.class.getName()).log(Level.SEVERE, null, ex);
         } 
+        JOptionPane.showMessageDialog(this, "Successfuly Uploaded data!!");
     }//GEN-LAST:event_StudentUploadExcelButtonActionPerformed
 
     private void StudentDeleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StudentDeleteButtonActionPerformed
@@ -542,14 +560,15 @@ public class StudentRegistration extends javax.swing.JInternalFrame {
         st.setFirstName(firstNameField.getText());
         st.setLastName(lastNameField.getText());
         st.setRegNumber(registrationNumberField.getText());
-        st.setEmailAddress(emailAddressField.getText());            
+        st.setEmailAddress(emailAddressField.getText()); 
+        st.setPhoto(path);
         st.setFaculty(facultyComboBox.getSelectedItem().toString());
         st.setPhonenumber(phoneNumberField.getText());
         st.setSemester(semesterComboBox.getSelectedItem().toString());
         st.setCourse(CourseComboBox.getSelectedItem().toString());
        
-        StudentDao stdo = new StudentDao();
-        stdo.delete(st);
+        IstudentInterface stin = new StudentDao();
+        Student ss = stin.delete(st);
        
         updateTable();
         resetFields();
@@ -567,10 +586,17 @@ public class StudentRegistration extends javax.swing.JInternalFrame {
         lastNameField.setText(model.getValueAt(row, 1).toString());
         registrationNumberField.setText(model.getValueAt(row, 2).toString());
         emailAddressField.setText(model.getValueAt(row, 3).toString());
-        facultyComboBox.setSelectedItem(model.getValueAt(row, 4).toString());
-        phoneNumberField.setText(model.getValueAt(row, 5).toString());
-        semesterComboBox.setSelectedItem(model.getValueAt(row, 6).toString());
-        CourseComboBox.setSelectedItem(model.getValueAt(row, 7).toString());
+        
+        String newpath = null;
+        newpath = model.getValueAt(row, 4).toString();
+        apicture = new ImageIcon(newpath);
+        Image image = apicture.getImage().getScaledInstance(imageLabel.getWidth(), imageLabel.getHeight(), Image.SCALE_SMOOTH);    
+        imageLabel.setIcon(new ImageIcon(image));
+        
+        facultyComboBox.setSelectedItem(model.getValueAt(row, 5).toString());
+        phoneNumberField.setText(model.getValueAt(row, 6).toString());
+        semesterComboBox.setSelectedItem(model.getValueAt(row, 7).toString());
+        CourseComboBox.setSelectedItem(model.getValueAt(row, 8).toString());
     }//GEN-LAST:event_StudentTableMouseClicked
 
     private void StudentResetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StudentResetButtonActionPerformed
@@ -591,6 +617,7 @@ public class StudentRegistration extends javax.swing.JInternalFrame {
             heading.createCell(1).setCellValue("Last name");
             heading.createCell(2).setCellValue("Reg number");
             heading.createCell(3).setCellValue("Email");
+            heading.createCell(4).setCellValue("Photo");
             heading.createCell(4).setCellValue("Faculty");
             heading.createCell(5).setCellValue("Phone number");
             heading.createCell(6).setCellValue("Semester");
@@ -628,16 +655,19 @@ public class StudentRegistration extends javax.swing.JInternalFrame {
                 Cell email = row.createCell(3);
                 email.setCellValue(t.getEmailAddress());
                 
-                Cell faculty = row.createCell(4);
+                Cell photo = row.createCell(4);
+                photo.setCellValue(t.getPhoto());
+                
+                Cell faculty = row.createCell(5);
                 faculty.setCellValue(t.getFirstName());
                 
-                Cell phone = row.createCell(5);
+                Cell phone = row.createCell(6);
                 phone.setCellValue(t.getLastName());
                 
-                Cell sem = row.createCell(6);
+                Cell sem = row.createCell(7);
                 sem.setCellValue(t.getRegNumber());
                 
-                Cell course = row.createCell(7);
+                Cell course = row.createCell(8);
                 course.setCellValue(t.getEmailAddress());
                 
                 numberOfRow++;
@@ -648,7 +678,7 @@ public class StudentRegistration extends javax.swing.JInternalFrame {
             }   
             
             //Creating the file
-            out = new FileOutputStream(new File("/home/hirwa/NetBeansProjects/22026-Student.M.S.HIBERNATE/StudentReport.xlsx"));
+            out = new FileOutputStream(new File("/home/hirwa/NetBeansProjects/Student.M.S.HIBERNATE.v2/StudentReport.xlsx"));
             workbook.write(out);
             out.close();
             workbook.close();
@@ -692,6 +722,7 @@ public class StudentRegistration extends javax.swing.JInternalFrame {
             pdfTable.addCell("Last name");
             pdfTable.addCell("Registration number");
             pdfTable.addCell("Email");
+            pdfTable.addCell("Photo");
             pdfTable.addCell("Faculty");
             pdfTable.addCell("Phone number");
             pdfTable.addCell("Semester");
@@ -703,15 +734,17 @@ public class StudentRegistration extends javax.swing.JInternalFrame {
                 String lname = StudentTable.getValueAt(i, 1).toString();
                 String regno = StudentTable.getValueAt(i, 2).toString();
                 String email = StudentTable.getValueAt(i, 3).toString();
-                String faculty = StudentTable.getValueAt(i, 4).toString();
-                String phone = StudentTable.getValueAt(i, 5).toString();
-                String sem = StudentTable.getValueAt(i, 6).toString();
-                String course = StudentTable.getValueAt(i, 7).toString();
+                String photo = StudentTable.getValueAt(i, 4).toString();
+                String faculty = StudentTable.getValueAt(i, 5).toString();
+                String phone = StudentTable.getValueAt(i, 6).toString();
+                String sem = StudentTable.getValueAt(i, 7).toString();
+                String course = StudentTable.getValueAt(i, 8).toString();
                 
                 pdfTable.addCell(fname);
                 pdfTable.addCell(lname);
                 pdfTable.addCell(regno);
                 pdfTable.addCell(email);
+                pdfTable.addCell(photo);
                 pdfTable.addCell(faculty);
                 pdfTable.addCell(phone);
                 pdfTable.addCell(sem);
@@ -730,6 +763,18 @@ public class StudentRegistration extends javax.swing.JInternalFrame {
         
         
     }//GEN-LAST:event_studentExportPdfButtonActionPerformed
+
+    private void BrowsePictureButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BrowsePictureButtonActionPerformed
+        // TODO add your handling code here:
+        JFileChooser file = new JFileChooser();
+        if(file.showOpenDialog(this)== JFileChooser.APPROVE_OPTION){
+            File photo = file.getSelectedFile();
+            path = photo.getAbsolutePath();
+            apicture = new ImageIcon(path);
+            Image image = apicture.getImage().getScaledInstance(imageLabel.getWidth(), imageLabel.getHeight(), Image.SCALE_SMOOTH);
+            imageLabel.setIcon(new ImageIcon(image));
+        }
+    }//GEN-LAST:event_BrowsePictureButtonActionPerformed
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BrowsePictureButton;
