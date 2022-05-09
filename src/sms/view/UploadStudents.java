@@ -118,7 +118,7 @@ public class UploadStudents extends javax.swing.JInternalFrame {
 
     private void uploadStudentButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uploadStudentButtonActionPerformed
         // TODO add your handling code here:
-        /*
+        
         int batchSize = 1000;
         Connection connection = null;      
         //String path;
@@ -209,7 +209,6 @@ public class UploadStudents extends javax.swing.JInternalFrame {
                     Logger.getLogger(UploadStudents.class.getName()).log(Level.SEVERE, null, ex);
                 }   
         } 
-        */
     }//GEN-LAST:event_uploadStudentButtonActionPerformed
 
 
